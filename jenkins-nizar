@@ -8,7 +8,6 @@ pipeline {
         stage('Build') { 
             steps {
                 echo 'building stage succesfuly'
-                echo "the building version is ${NEW_VERSION}"
             }
         }
         stage('Test') { 
