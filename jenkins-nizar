@@ -19,7 +19,7 @@ pipeline {
         stage('Deploy') { 
             steps {
                 echo 'Deploying stage done ...'
-                echo "deploying with ${SEVER_CREDENTIALS}"
+                echo "deploying with ${SERVER_CREDENTIALS}"
                 sh "${SERVER_CREDENTIALS}"
             }
         }
