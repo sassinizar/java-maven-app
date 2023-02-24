@@ -1,32 +1,38 @@
 pipeline {
     agent any
-    environment {
-        NEW_VERSION = '1.3.0'
-        SERVER_CREDENTIALS = credentials('jenkins-credentials')
+    tools {
+        maven 'Maven'
     }
     stages {
-        stage("init") {
-            steps {
-                echo 'initialisation stage version = ${NEW_VERSION}'
-            }
-        }
+       
         stage("build jar") {
             steps {
-              echo 'initialisation stage'
+                script {
+                    echo 'building the application...'
+                    sh 'mvn package'
+                }
             }
         }
-        stage("build image") {
+        stage("build docker image") {
             steps {
-               
-                    echo 'building image'
+                script {
+                    echo 'building the docker image...'
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'docker', usernameVariable: 'docker')]){
+                            sh 'docker build -t nizarsassi/demo-app:jma-2.0'
+                            sh "echo $docker | docker login -u $docker --password-stdin"
+                            sh 'docker push nizarsassi/demo-app:jma-2.0 '
+                    }
+                    
+                }
             }
         }
-        stage("deploy") {
+        stage("Deploy") {
             steps {
-                  echo 'deploying stage .......'
-                echo 'deploying with jenkins server credentials ${SERVER_CREDENTIALS}'
-                sh "${SERVER_CREDENTIALS}"
-            }
-        }
-    }   
+                script {
+                    echo 'deploying image...'
+                }
+                   
+           }
+       
+       }   
 }
