@@ -30,9 +30,7 @@ pipeline {
             steps {
                 script {
                     echo 'deploying image...'
-                }
-                   
-           }
-       
-       }   
-}
+                }     
+            }
+        } 
+      }
